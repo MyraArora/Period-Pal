@@ -7,4 +7,5 @@ pandas
 regex 
 requests 
 s3fs==0.4.* 
+protobuf==3.20.3
 streamlit==1.1.*

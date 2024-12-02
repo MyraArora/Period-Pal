@@ -1,3 +1,10 @@
-git add requirements.txt
-git commit -m "Fix requirements.txt"
-git push
+altair 
+boto3 
+ccxt 
+google 
+gspread 
+pandas 
+regex 
+requests 
+s3fs==0.4.* 
+streamlit==1.1.*

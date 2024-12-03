@@ -93,7 +93,6 @@ keywords = {
     'discomfort': 'Feeling discomfort can be a part of your period. If the pain gets too much, let me know if you need tips to ease it.',
     'tension': 'Tension can build up in your muscles around this time. A nice warm bath or a gentle massage could help ease it.',
     'headache relief': 'A headache can be tough, but staying hydrated and resting in a quiet space might give you some relief.',
-    'period': 'Your period is a natural process where the body sheds the uterine lining. If you have any concerns, feel free to ask.',
     'exhausted': 'Exhaustion is something many people feel during their period. Make sure to take naps and rest as much as you need.',
     'moody': 'Feeling moody is completely normal when your hormones are shifting. How can I help make your day a little better?',
     'pain relief': 'For cramps, using a heating pad, staying hydrated, and light stretching can all help ease the discomfort.',

@@ -324,6 +324,54 @@ if st.button("Get Advice"):
         else:
             st.write("Please consult a healthcare provider for a more accurate diagnosis.")
 
+        if 'Pain in Lower Abdomen' in selected_symptoms:
+            st.write("Pain in the lower abdomen can be caused by several factors such as menstrual cramps, gastrointestinal issues, or urinary tract infections. It is best to consult a healthcare provider for a proper diagnosis.")
+        if 'Urinary Pain' in selected_symptoms:
+            st.write("Urinary pain may indicate a urinary tract infection (UTI) or other bladder issues. Drinking plenty of water and seeing a doctor for further evaluation is recommended.")
+        if 'Nausea/Vertigo' in selected_symptoms:
+            st.write("Nausea and vertigo can be caused by a variety of conditions such as dehydration, inner ear problems, or vestibular disorders. Rest and hydration might help, but if symptoms persist, consult a healthcare provider.")
+        if 'Headache' in selected_symptoms:
+            st.write("Headaches can be triggered by various factors like stress, dehydration, or lack of sleep. Managing stress and staying hydrated can help alleviate mild headaches. If severe or recurring, consult a doctor.")
+        if 'Breast Tenderness' in selected_symptoms:
+            st.write("Breast tenderness can be linked to hormonal changes, menstruation, or pregnancy. If symptoms persist or are associated with other concerns, consider speaking with a healthcare provider.")
+        if 'Digestive Problems' in selected_symptoms:
+            st.write("Digestive problems such as bloating, constipation, or diarrhea can be related to diet or stress. A balanced diet and staying hydrated can often help. If the issue continues, consult a gastroenterologist.")
+        if 'Diarrhea' in selected_symptoms:
+            st.write("Diarrhea can result from infections, food intolerance, or digestive issues. Staying hydrated is important. If diarrhea lasts more than a few days, see a doctor.")
+        if 'Constipation' in selected_symptoms:
+            st.write("Constipation is often caused by dehydration, lack of fiber in the diet, or stress. Increase fiber intake and stay hydrated. If persistent, consider consulting a healthcare professional.")
+        if 'Sadness' in selected_symptoms:
+            st.write("Sadness can be a sign of emotional distress or depression. Talking to a counselor or a therapist can help you manage your feelings.")
+        if 'Emotional lability' in selected_symptoms:
+            st.write("Emotional lability refers to rapid changes in emotional state and could be linked to stress, anxiety, or hormonal changes. Consider mindfulness exercises or speaking with a therapist.")
+        if 'Irritability/anger' in selected_symptoms:
+            st.write("Irritability and anger can be triggered by stress, lack of sleep, or emotional exhaustion. Try practicing relaxation techniques like deep breathing or meditation.")
+        if 'Anxiety' in selected_symptoms:
+            st.write("Anxiety can manifest physically and emotionally. It may help to practice relaxation techniques, exercise, and seek professional help if the anxiety becomes overwhelming.")
+        if 'Increased appetite' in selected_symptoms:
+            st.write("Increased appetite can be a sign of stress, hormonal imbalances, or other health concerns. It's important to maintain a balanced diet and seek medical advice if the change is persistent.")
+        if 'Decreased appetite' in selected_symptoms:
+            st.write("Decreased appetite can be caused by stress, illness, or emotional distress. It is important to eat small, balanced meals, and consult a healthcare provider if the problem continues.")
+        if 'Insomnia' in selected_symptoms:
+            st.write("Insomnia can be due to stress, anxiety, or an underlying health condition. Improving your sleep hygiene and seeking professional help for persistent issues can be beneficial.")
+        if 'Hypersomnia' in selected_symptoms:
+            st.write("Hypersomnia, or excessive sleepiness, can be related to sleep disorders, depression, or other health concerns. Seek medical advice to rule out underlying conditions.")
+        if 'Fatigue' in selected_symptoms:
+            st.write("Fatigue can be caused by a variety of factors, including stress, sleep deprivation, or an underlying medical condition. Make sure you're getting adequate rest, and see a doctor if fatigue persists.")
+        if 'Decreased sexual drive' in selected_symptoms:
+            st.write("A decrease in sexual drive can be influenced by stress, hormonal imbalances, or emotional issues. It may help to discuss with a healthcare provider to determine the cause.")
+        if 'Concentration impairment' in selected_symptoms:
+            st.write("Difficulty concentrating can be linked to stress, lack of sleep, or mental fatigue. Ensuring you have a balanced routine and taking time for relaxation can help.")
+        if 'Pain during sexual intercourse' in selected_symptoms:
+            st.write("Pain during sexual intercourse can be related to hormonal issues, infections, or psychological factors. It's important to discuss this symptom with a gynecologist.")
+        if 'Feeling of being impure' in selected_symptoms:
+            st.write("Feelings of being impure or dirty can be associated with emotional distress, guilt, or stress. It might be helpful to speak with a therapist or counselor.")
+        if 'Discomfort due to vaginal bleeding' in selected_symptoms:
+            st.write("Vaginal bleeding can be linked to menstrual cycles, hormonal changes, or other gynecological issues. It's important to track your symptoms and consult a healthcare provider.")
+        if 'Pain in Lower Abdomen' in selected_symptoms and 'Urinary Pain' in selected_symptoms:
+            st.write("These combined symptoms may indicate a urinary tract infection (UTI) or gynecological issues. Please consult a healthcare provider for proper diagnosis and treatment.")
+        if 'Fatigue' in selected_symptoms and 'Pain during sexual intercourse' in selected_symptoms:
+            st.write("These symptoms might indicate hormonal imbalances, stress, or other health concerns. A healthcare provider will be able to guide you in determining the cause.")
 
         # AI-based Advice
         st.subheader("AI-Based Advice:")

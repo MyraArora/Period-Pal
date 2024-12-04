@@ -168,41 +168,29 @@ if st.button("Calculate Cycle Length"):
             "It seems your cycle length is a bit irregular. Consider consulting a healthcare provider if this continues.")
 
 
-# Load the Sentiment140 dataset (Make sure the file 'sentiment.csv' is in your working directory)
-from transformers import pipeline
+from textblob import TextBlob
 
-# Load the pre-trained sentiment analysis model from Hugging Face
+# Analyze sentiment using TextBlob
 @st.cache_resource
-def load_model():
-    # Load the pre-trained sentiment analysis pipeline
-    sentiment_analyzer = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment")
-    return sentiment_analyzer
-
-# Analyze sentiment using the Sentiment140 dataset-based model
 def analyze_sentiment(text):
-    sentiment_analyzer = load_model()
-    result = sentiment_analyzer(text)[0]
-    return result['label'], result['score']
+    analysis = TextBlob(text).sentiment
+    return analysis.polarity
 
 # Streamlit UI
 st.title("Emotion Journal")
 st.write("Tell me how you're feeling, and I'll try to respond appropriately!")
-
 # Input from the user
 user_input = st.text_input("How are you feeling today?")
-
 if user_input:
-    # Get sentiment label and score
-    label, score = analyze_sentiment(user_input)
-
-    # Provide a response based on sentiment label
-    if label == "POSITIVE":
-        st.write(f"🌟 I'm glad you're feeling good! Keep up the positive vibes! (Confidence: {score:.2f})")
-    elif label == "NEGATIVE":
-        st.write(f"💔 I'm sorry you're feeling this way. Remember, it's okay to have tough days. (Confidence: {score:.2f})")
+    # Get sentiment polarity
+    polarity = analyze_sentiment(user_input)
+    # Provide a response based on sentiment polarity
+    if polarity > 0:
+        st.write("🌟 I'm glad you're feeling good! Keep up the positive vibes!")
+    elif polarity < 0:
+        st.write("💔 I'm sorry you're feeling this way. Remember, it's okay to have tough days.")
     else:
-        st.write(f"😐 Thanks for sharing. I'm here to chat if you want to talk more! (Confidence: {score:.2f})")
-
+        st.write("Thanks for sharing. I'm here to chat if you want to talk more!")
 
 # Updated dataset with the new symptoms
 data = {

@@ -15,6 +15,7 @@ nltk.download('stopwords')
 
 # Define expanded keywords and responses
 keywords = {
+    'period': 'Your period is a natural process where the body sheds the uterine lining. If you have any concerns, feel free to ask.',
     'cycle': 'A regular menstrual cycle typically lasts between 21 to 35 days. Tracking it is important for understanding your body.',
     'irregular': 'Irregular periods can happen for many reasons. If you experience irregularities, consider consulting with a healthcare provider.',
     'hygiene': 'During your period, it’s important to maintain hygiene. Changing pads/tampons regularly and keeping your private areas clean is essential.',
@@ -162,62 +163,78 @@ if st.button("Calculate Cycle Length"):
     cycle_length = (end_date - start_date).days
     st.write(f"Your last cycle was {cycle_length} days long.")
 
-    if cycle_length < 3 or cycle_length > 6:
+    if cycle_length < 21 or cycle_length > 35:
         st.warning(
             "It seems your cycle length is a bit irregular. Consider consulting a healthcare provider if this continues.")
 
-# Encourage emotional expression
-st.write("## How Are You Feeling Today?")
-mood = st.selectbox("Select your mood:", [
-                    "Happy", "Anxious", "Irritated", "Sad", "Confused", "Other"])
-if st.button("Share"):
-    st.write(
-        f"It's perfectly normal to feel {mood}. Remember, it's okay to express your emotions. Journaling or talking to someone you trust can help.")
+from textblob import TextBlob
 
-st.write("Thank you for chatting! Remember, you're not alone on this journey.")
+# Analyze sentiment using TextBlob
+@st.cache_resource
+def analyze_sentiment(text):
+    analysis = TextBlob(text).sentiment
+    return analysis.polarity
 
+# Streamlit UI
+st.title("Emotion Journal")
+st.write("Tell me how you're feeling, and I'll try to respond appropriately!")
+
+# Input from the user
+user_input = st.text_input("How are you feeling today?")
+
+if user_input:
+    # Get sentiment polarity
+    polarity = analyze_sentiment(user_input)
+
+    # Provide a response based on sentiment polarity
+    if polarity > 0:
+        st.write("🌟 I'm glad you're feeling good! Keep up the positive vibes!")
+    elif polarity < 0:
+        st.write("💔 I'm sorry you're feeling this way. Remember, it's okay to have tough days.")
+    else:
+        st.write("Thanks for sharing. I'm here to chat if you want to talk more!")
+
+# Updated dataset with the new symptoms
 data = {
     'Symptoms': [
-        'Cramps, Mood Swings, Fatigue',
-        'Bloating, Headache, Acne',
-        'Back Pain, Stress, Fatigue',
-        'Nausea, Dizziness, Irritability',
-        'Tender Breasts, Constipation, Mood Swings',
-        'Sleep Disturbances, Stress, Anxiety',
-        'Headache, Nausea, Bloating',
-        'Fatigue, Joint Pain, Back Pain',
-        'Mood Swings, Irritability, Stress',
-        'Acne, Bloating, Food Cravings',
-        'Headache, Fatigue, Dizziness',
-        'Back Pain, Insomnia, Stress',
-        'Fatigue, Low Appetite, Weakness',
-        'Cramps, Bloating, Nausea',
-        'Tender Breasts, Cravings, Mood Swings',
-        'Acne, Hormonal Imbalance, Bloating',
-        'Nausea, Fatigue, Hot Flashes',
-        'Anxiety, Irritability, Weakness',
-        'Stress, Insomnia, Headache',
-        'Fatigue, Depression, Stress',
-        'Back Pain, Headache, Anxiety',
-        'Bloating, Constipation, Fatigue',
-        'Mood Swings, Anxiety, Stress',
-        'Cramps, Stress, Weakness',
-        'Acne, Anxiety, Hormonal Imbalance',
-        'Tender Breasts, Nausea, Cravings',
-        'Dizziness, Weakness, Anxiety'
+        'Pain in Lower Abdomen, Urinary Pain, Nausea/Vertigo',
+        'Headache, Breast Tenderness, Digestive Problems',
+        'Diarrhea, Constipation, Feeling of being impure',
+        'Sadness, Emotional lability, Anxiety',
+        'Irritability/anger, Impulsiveness, Decreased appetite',
+        'Increased appetite, Fatigue, Pain during sexual intercourse',
+        'Headache, Fatigue, Anxiety',
+        'Pain in Lower Abdomen, Irritability/anger, Anxiety',
+        'Breast Tenderness, Insomnia, Hypersomnia',
+        'Concentration impairment, Fatigue, Decreased sexual drive',
+        'Urinary Pain, Nausea/Vertigo, Headache',
+        'Digestive Problems, Constipation, Decreased appetite',
+        'Sadness, Emotional lability, Insomnia',
+        'Diarrhea, Discomfort due to vaginal bleeding, Pain during sexual intercourse',
+        'Pain in Lower Abdomen, Sadness, Fatigue',
+        'Increased appetite, Anxiety, Emotional lability',
+        'Pain in Lower Abdomen, Headache, Decreased sexual drive',
+        'Pain during sexual intercourse, Irritability/anger, Insomnia',
+        'Nausea/Vertigo, Fatigue, Anxiety',
+        'Sadness, Emotional lability, Irritability/anger',
+        'Headache, Pain in Lower Abdomen, Decreased appetite',
+        'Pain during sexual intercourse, Increased appetite, Fatigue',
+        'Pain in Lower Abdomen, Digestive Problems, Sadness',
+        'Insomnia, Fatigue, Decreased sexual drive',
+        'Diarrhea, Urinary Pain, Decreased appetite'
     ],
     'Category': [
-        'Hormonal Imbalance', 'Acne & Digestion', 'Stress-related', 'Nausea/Vertigo', 
-        'Hormonal Imbalance', 'Mental Health', 'Acne & Digestion', 'Stress-related', 
-        'Mental Health', 'Acne & Digestion', 'Nausea/Vertigo', 'Stress-related', 
-        'Fatigue & Weakness', 'Hormonal Imbalance', 'Hormonal Imbalance', 'Acne & Digestion', 
-        'Hormonal Imbalance', 'Mental Health', 'Mental Health', 'Stress-related', 'Mental Health', 
-        'Acne & Digestion', 'Mental Health', 'Fatigue & Weakness', 'Hormonal Imbalance', 
-        'Acne & Digestion', 'Mental Health'
+        'Abdominal Issues', 'Breast & Digestion', 'Digestion & Discomfort', 'Mental Health', 
+        'Mental Health', 'Fatigue & Sexual Health', 'Mental Health', 'Abdominal & Mental Health', 
+        'Breast Health', 'Sexual Health & Mental Health', 'Nausea & Headache', 'Digestion & Appetite', 
+        'Mental Health', 'Pain & Sexual Health', 'Abdominal & Fatigue', 'Mental Health & Appetite', 
+        'Abdominal & Sexual Health', 'Mental Health & Sexual Health', 'Fatigue & Mental Health', 
+        'Mental Health', 'Abdominal & Appetite', 'Fatigue & Sexual Health', 'Abdominal & Digestion', 
+        'Sexual Health & Fatigue', 'Diarrhea & Pain'
     ]
 }
 
-# Convert to DataFrame for AI model
+# Convert to DataFrame
 df = pd.DataFrame(data)
 
 # Use CountVectorizer to convert symptoms into a numerical format
@@ -238,115 +255,19 @@ model.fit(X_train, y_train)
 # Streamlit interface for symptom selection
 st.title("Symptom Tracker Quiz")
 
-# List of symptoms to select from (both for AI and non-AI advice)
+# Updated symptom options based on the new symptoms
 symptom_options = [
-    'Cramps', 'Mood Swings', 'Fatigue', 'Bloating', 'Headache', 'Acne', 
-    'Back Pain', 'Nausea', 'Dizziness', 'Tender Breasts', 'Constipation', 
-    'Diarrhea', 'Appetite Changes', 'Sleep Disturbances', 'Urinary Urgency', 
-    'Hot Flashes', 'Stress', 'Irritability', 'Weakness', 'Chills', 
-    'Joint Pain', 'Numbness', 'Skin Rashes', 'Vaginal Discharge', 'Cravings', 
-    'Anxiety', 'Depression', 'Feeling Overwhelmed', 'Breast Tenderness'
+    'Pain in Lower Abdomen', 'Urinary Pain', 'Pain at Defecation', 'Nausea/Vertigo', 
+    'Headache', 'Breast Tenderness', 'Digestive Problems', 'Diarrhea', 'Constipation', 
+    'Discomfort due to vaginal bleeding', 'Feeling of being impure', 'Sadness', 
+    'Emotional lability', 'Irritability/anger', 'Impulsiveness', 'Anxiety', 'Increased appetite', 
+    'Decreased appetite', 'Insomnia', 'Hypersomnia', 'Fatigue', 'Decreased sexual drive', 
+    'Concentration impairment', 'Pain during sexual intercourse'
 ]
 
 # Collecting symptoms from the user using checkboxes
-st.header("Please select your current symptoms:")
+st.header("Please select your 3 most severe current symptoms:")
 selected_symptoms = []
-
-def give_advice(symptoms):
-    advice = []
-
-    # Providing advice for common symptoms
-    if 'Cramps' in symptoms:
-        advice.append("Consider using a heating pad to relieve cramps and take over-the-counter pain relievers if needed. Stretching exercises or light yoga may help.")
-    
-    if 'Mood Swings' in symptoms:
-        advice.append("Try practicing mindfulness or meditation to help manage mood swings. Gentle exercise or talking to someone you trust can also help.")
-    
-    if 'Fatigue' in symptoms:
-        advice.append("Ensure you're getting enough rest and staying hydrated. Healthy snacks with a mix of protein and carbs can give you a boost of energy.")
-    
-    if 'Bloating' in symptoms:
-        advice.append("Try avoiding salty foods and eating smaller meals throughout the day. Staying hydrated and doing light exercises may also help with bloating.")
-    
-    if 'Headache' in symptoms:
-        advice.append("For headaches, try a cool compress, rest in a dark room, and drink plenty of water. Over-the-counter pain relievers may help.")
-    
-    if 'Acne' in symptoms:
-        advice.append("For acne, keep your skin clean and hydrated. You might also want to avoid touching your face too much and use non-comedogenic products.")
-    
-    if 'Back Pain' in symptoms:
-        advice.append("Back pain can be relieved by using a heating pad or gentle stretching. Consider a relaxing yoga session or getting a massage.")
-    
-    if 'Nausea' in symptoms:
-        advice.append("Try sipping ginger tea or staying hydrated. If nausea persists, it might be helpful to avoid heavy foods and opt for light snacks.")
-    
-    if 'Dizziness' in symptoms:
-        advice.append("Make sure to stay hydrated and rest. If dizziness continues, it's best to consult a healthcare provider.")
-    
-    if 'Tender Breasts' in symptoms:
-        advice.append("Breast tenderness can be eased by wearing a supportive bra. Try avoiding tight clothing and caffeine if it helps reduce discomfort.")
-    
-    if 'Constipation' in symptoms:
-        advice.append("Eating fiber-rich foods, staying hydrated, and doing some gentle exercise can help ease constipation.")
-    
-    if 'Diarrhea' in symptoms:
-        advice.append("For diarrhea, drink plenty of fluids to stay hydrated. Avoid dairy and greasy foods, and consider eating bland foods like rice or bananas.")
-    
-    if 'Appetite Changes' in symptoms:
-        advice.append("It's normal to experience appetite changes. Try eating smaller, balanced meals throughout the day to help manage hunger.")
-    
-    if 'Sleep Disturbances' in symptoms:
-        advice.append("Try to create a relaxing bedtime routine, avoid screen time before bed, and ensure your bedroom is cool and dark to improve sleep quality.")
-    
-    if 'Urinary Urgency' in symptoms:
-        advice.append("Stay hydrated and avoid caffeine. If symptoms persist, it might be helpful to see a healthcare provider.")
-    
-    if 'Hot Flashes' in symptoms:
-        advice.append("Staying cool with light clothing or fans and staying hydrated may help with hot flashes.")
-    
-    if 'Stress' in symptoms:
-        advice.append("Take time to practice relaxation techniques like deep breathing, meditation, or even journaling to relieve stress.")
-    
-    if 'Irritability' in symptoms:
-        advice.append("Taking regular breaks and practicing mindfulness can help manage irritability. Don't hesitate to talk to a friend or family member.")
-    
-    if 'Weakness' in symptoms:
-        advice.append("Weakness can be related to fatigue or low iron. Resting, staying hydrated, and having a balanced diet might help.")
-    
-    if 'Chills' in symptoms:
-        advice.append("Wear warm clothing and stay cozy. If chills persist, it might be a sign of something more, so consider seeing a doctor.")
-    
-    if 'Joint Pain' in symptoms:
-        advice.append("Gentle exercises or stretching can help with joint pain. Over-the-counter pain relievers or warm baths may also provide relief.")
-    
-    if 'Numbness' in symptoms:
-        advice.append("If you experience numbness frequently, it may be worth consulting a healthcare provider to rule out any underlying issues.")
-    
-    if 'Skin Rashes' in symptoms:
-        advice.append("For skin rashes, consider using soothing creams or lotions. If they persist or worsen, it's best to consult a doctor.")
-    
-    if 'Vaginal Discharge' in symptoms:
-        advice.append("It's normal to have vaginal discharge, but if you notice unusual color or odor, it’s important to consult with a healthcare provider.")
-    
-    if 'Cravings' in symptoms:
-        advice.append("Cravings are common during certain times of the month. Try to balance your cravings with healthier alternatives like fruit or nuts.")
-    
-    if 'Anxiety' in symptoms:
-        advice.append("Take deep breaths and focus on grounding exercises. It might also help to talk to someone you trust or take a break from stressors.")
-    
-    if 'Depression' in symptoms:
-        advice.append("If you're feeling down for a prolonged period, don't hesitate to reach out for support from friends, family, or a healthcare professional.")
-    
-    if 'Feeling Overwhelmed' in symptoms:
-        advice.append("Taking one task at a time and breaking big tasks into smaller ones can help. It’s okay to ask for help if you need it.")
-    
-    if 'Breast Tenderness' in symptoms:
-        advice.append("Wear a comfortable and supportive bra. Avoid tight clothing and caffeine if they make the tenderness worse.")
-
-    if not symptoms:
-        advice.append("You're feeling great today! Keep taking care of yourself.")
-
-    return advice
 
 for symptom in symptom_options:
     if st.checkbox(symptom):
@@ -356,10 +277,53 @@ for symptom in symptom_options:
 if st.button("Get Advice"):
 
     if selected_symptoms:
-        st.subheader("Advice based on your symptoms:")
-        advice = give_advice(selected_symptoms)
-        for item in advice:
-            st.write(f"- {item}")
+        # Non-AI-based Advice
+        st.subheader("Advice based on selected symptoms (Non-AI):")
+    
+        # Rule-based advice (Non-AI)
+        if 'Pain in Lower Abdomen' in selected_symptoms and 'Urinary Pain' in selected_symptoms:
+            st.write("You may be experiencing urinary tract or abdominal issues. Consider seeing a doctor for further diagnosis.")
+        elif 'Fatigue' in selected_symptoms and 'Pain during sexual intercourse' in selected_symptoms:
+            st.write("These symptoms could indicate hormonal or sexual health issues. Please consult a healthcare provider.")
+        elif 'Sadness' in selected_symptoms and 'Emotional lability' in selected_symptoms:
+            st.write("You may be experiencing emotional distress. It could be helpful to talk to a counselor or a mental health professional.")
+        elif 'Diarrhea' in selected_symptoms and 'Discomfort due to vaginal bleeding' in selected_symptoms:
+            st.write("These symptoms may suggest a digestive or gynecological issue. A visit to a healthcare provider is recommended.")
+        elif 'Nausea/Vertigo' in selected_symptoms and 'Headache' in selected_symptoms:
+            st.write("You may be experiencing a migraine or dizziness. Hydration and rest could help, but it's advisable to consult a healthcare professional if symptoms persist.")
+        elif 'Breast Tenderness' in selected_symptoms and 'Fatigue' in selected_symptoms:
+            st.write("These symptoms may be associated with hormonal changes. If symptoms continue, consider seeing a healthcare provider.")
+        elif 'Irritability/anger' in selected_symptoms and 'Anxiety' in selected_symptoms:
+            st.write("You may be dealing with stress or anxiety. Consider practicing relaxation techniques or seeking help from a mental health professional.")
+        elif 'Increased appetite' in selected_symptoms and 'Decreased sexual drive' in selected_symptoms:
+            st.write("These symptoms may indicate hormonal imbalances or stress. A healthcare provider can help determine the underlying cause.")
+        elif 'Decreased appetite' in selected_symptoms and 'Fatigue' in selected_symptoms:
+            st.write("These symptoms could indicate stress, fatigue, or a possible underlying health issue. It’s best to speak to a healthcare provider.")
+        elif 'Insomnia' in selected_symptoms and 'Fatigue' in selected_symptoms:
+            st.write("You may be experiencing sleep disturbances that are affecting your energy levels. Consider improving sleep hygiene and consult a doctor if the issue persists.")
+        elif 'Hypersomnia' in selected_symptoms and 'Fatigue' in selected_symptoms:
+            st.write("Excessive sleepiness along with fatigue may suggest a sleep disorder or underlying health concern. Seek medical advice for a diagnosis.")
+        elif 'Pain in Lower Abdomen' in selected_symptoms and 'Constipation' in selected_symptoms:
+            st.write("These symptoms could suggest gastrointestinal issues. A balanced diet with fiber and hydration might help, but see a doctor if the symptoms persist.")
+        elif 'Pain during sexual intercourse' in selected_symptoms and 'Pain in Lower Abdomen' in selected_symptoms:
+            st.write("These symptoms may be related to gynecological issues, such as endometriosis or fibroids. Please see a gynecologist for further evaluation.")
+        elif 'Concentration impairment' in selected_symptoms and 'Fatigue' in selected_symptoms:
+            st.write("Difficulty concentrating along with fatigue can be signs of burnout or stress. Rest and self-care are essential, and you may need professional support.")
+        elif 'Sadness' in selected_symptoms and 'Anxiety' in selected_symptoms:
+            st.write("Sadness and anxiety can be indicative of mental health challenges. Seeking help from a counselor or mental health professional is advisable.")
+        elif 'Feeling of being impure' in selected_symptoms and 'Irritability/anger' in selected_symptoms:
+            st.write("Feelings of impurity and irritability can be associated with mental health or hormonal issues. It may be helpful to discuss these with a therapist or healthcare provider.")
+        elif 'Breast Tenderness' in selected_symptoms and 'Headache' in selected_symptoms:
+            st.write("These symptoms may indicate hormonal fluctuations, such as those before a menstrual period. If they persist, a healthcare provider can help.")
+        elif 'Nausea/Vertigo' in selected_symptoms and 'Fatigue' in selected_symptoms:
+            st.write("Nausea and fatigue could indicate a number of issues, including low blood sugar or vertigo. Please consult a healthcare professional for an accurate diagnosis.")
+        elif 'Irritability/anger' in selected_symptoms and 'Pain in Lower Abdomen' in selected_symptoms:
+            st.write("You may be experiencing symptoms related to hormonal changes or menstrual discomfort. Consider tracking your symptoms and discussing with your doctor.")
+        elif 'Diarrhea' in selected_symptoms and 'Constipation' in selected_symptoms:
+            st.write("Having both diarrhea and constipation can sometimes indicate a condition such as irritable bowel syndrome (IBS). Consult a gastroenterologist for a proper diagnosis.")
+        else:
+            st.write("Please consult a healthcare provider for a more accurate diagnosis.")
+
 
         # AI-based Advice
         st.subheader("AI-Based Advice:")
@@ -375,15 +339,19 @@ if st.button("Get Advice"):
         category = encoder.inverse_transform(predicted_category)[0]
 
         # Provide AI-generated advice based on predicted category
-        if category == 'Hormonal Imbalance':
-            st.write("AI-based advice: Consider balancing your hormones with a healthy diet, exercise, and stress management techniques. Consult a healthcare provider if symptoms persist.")
-        elif category == 'Acne & Digestion':
-            st.write("AI-based advice: Maintain a skin-care routine, stay hydrated, and consider dietary changes like reducing processed foods. Also, try adding fiber to your diet to improve digestion.")
-        elif category == 'Stress-related':
-            st.write("AI-based advice: Practice mindfulness, yoga, or deep breathing exercises. Try to manage stress by prioritizing rest and relaxation. Speaking to a therapist can also be helpful.")
-        elif category == 'Nausea/Vertigo':
-            st.write("AI-based advice: Ginger tea can help with nausea. Stay hydrated and avoid sudden head movements. If dizziness persists, consult a doctor.")
+        if category == 'Abdominal Issues':
+            st.write("AI-based advice: It may be an issue with your abdominal region, possibly related to digestion or menstrual health. Consider a consultation with a doctor for further diagnosis.")
+        elif category == 'Breast & Digestion':
+            st.write("AI-based advice: You might be experiencing discomfort related to your digestive system or breast health. Consider monitoring your diet and seeking medical advice if symptoms persist.")
         elif category == 'Mental Health':
-            st.write("AI-based advice: Try relaxation techniques such as meditation or talking to someone you trust. If you're feeling overwhelmed, consider reaching out to a mental health professional.")
+            st.write("AI-based advice: These symptoms might indicate a mental health issue, such as anxiety or stress. It's recommended to practice relaxation techniques and consult a mental health professional.")
+        elif category == 'Sexual Health & Mental Health':
+            st.write("AI-based advice: Your symptoms may be related to sexual health or emotional stress. It may be helpful to speak to a healthcare provider or therapist for further advice.")
+        elif category == 'Fatigue & Sexual Health':
+            st.write("AI-based advice: These symptoms could be linked to hormonal or sexual health issues. Consider seeing a doctor for a more thorough evaluation.")
+        elif category == 'Digestion & Discomfort':
+            st.write("AI-based advice: These symptoms may be due to digestive issues or menstrual problems. A balanced diet and medical consultation may help address these concerns.")
+        else:
+            st.write("AI-based advice: Please seek professional medical advice for more personalized recommendations.")
     else:
         st.write("Please select at least one symptom.")

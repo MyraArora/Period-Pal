@@ -163,7 +163,7 @@ if st.button("Calculate Cycle Length"):
     cycle_length = (end_date - start_date).days
     st.write(f"Your last cycle was {cycle_length} days long.")
 
-    if cycle_length < 21 or cycle_length > 35:
+    if cycle_length < 3 or cycle_length > 6:
         st.warning(
             "It seems your cycle length is a bit irregular. Consider consulting a healthcare provider if this continues.")
 
